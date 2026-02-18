@@ -39,9 +39,7 @@
 
 ### Dashboard — Nmap Scan
 > The dashboard opens in a new tab with a sidebar containing all 17 tools. Each tool has its own RUN button and terminal-style output area.
-
-### Dashboard — DNS Map
-> Interactive graph visualization of DNS records (Name Servers, Mail Servers, A Records, Subdomains).
+> <img width="1897" height="902" alt="image" src="https://github.com/user-attachments/assets/8103cdf9-d03b-41de-b99b-96e5bb1448d1" />
 
 ---
 
