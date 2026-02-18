@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antigravity AI</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <svg wwidth="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+        webnmap
+      </div>
+      <div class="status-badge" id="global-status">Active</div>
+    </header>
+
+    <!-- Current Tab Intelligence -->
+    <section class="card" id="current-tab-card">
+      <div class="card-header">
+        <span class="card-title">CURRENT TAB INTELLIGENCE</span>
+        <span id="scan-time" style="font-size: 0.7rem; color: var(--text-secondary);">Just now</span>
+      </div>
+      <div class="risk-indicator">
+        <div class="risk-score risk-low" id="risk-score">SECURE</div>
+        <div style="flex: 1;">
+          <div style="font-size: 0.8rem; margin-bottom: 4px;" id="current-domain">example.com</div>
+          <div style="font-size: 0.7rem; color: var(--text-secondary);" id="tls-info">TLS 1.3 • AES_128_GCM</div>
+        </div>
+      </div>
+      <div style="margin-top: 12px; display: flex; gap: 8px;">
+        <div class="status-badge" id="header-csp">CSP: CHECK</div>
+        <div class="status-badge" id="header-hsts">HSTS: ON</div>
+      </div>
+    </section>
+
+    <!-- Multi-Tab Overview -->
+    <section class="card">
+      <div class="card-header">
+        <span class="card-title">OPEN TABS OVERVIEW</span>
+      </div>
+      <div class="tab-list" id="tab-list">
+        <!-- Tab items will be injected here -->
+        <div class="tab-item">
+          <div class="tab-info">
+            <span class="tab-domain">Loading tabs...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <section>
+      <button class="btn" id="manual-scan-btn">Initiate Active Scan (Auth Required)</button>
+    </section>
+  </div>
+  <script src="popup.js"></script>
+</body>
+
+</html>

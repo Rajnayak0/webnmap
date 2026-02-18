@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>webnmap Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">webnmap_ v1.1</div>
+            <nav>
+                <button class="nav-btn active" data-target="overview">Overview</button>
+                <button class="nav-btn" data-target="nmap-scan">Nmap Scan</button>
+                <button class="nav-btn" data-target="port-scan">Port Scan</button>
+                <button class="nav-btn" data-target="dns-lookup">DNS Lookup</button>
+                <button class="nav-btn" data-target="reverse-dns">Reverse DNS</button>
+                <button class="nav-btn" data-target="reverse-ip">Reverse IP</button>
+                <button class="nav-btn" data-target="dns-map">DNS Map</button>
+                <button class="nav-btn" data-target="traceroute">Traceroute</button>
+                <button class="nav-btn" data-target="ping-tool">Ping</button>
+                <button class="nav-btn" data-target="whois">Whois</button>
+                <button class="nav-btn" data-target="geoip">GeoIP Lookup</button>
+                <button class="nav-btn" data-target="asn-lookup">ASN Lookup</button>
+                <button class="nav-btn" data-target="http-headers">HTTP Headers</button>
+                <button class="nav-btn" data-target="page-links">Page Links</button>
+                <button class="nav-btn" data-target="vuln-scan">Vuln Scan</button>
+                <button class="nav-btn" data-target="dir-brute">Dir Brute</button>
+                <button class="nav-btn" data-target="structure">Site Structure</button>
+            </nav>
+            <div class="status-box" style="margin-bottom: 20px;">
+                <div style="font-size: 1.2rem; color: #fff; margin-bottom:5px;">TARGET: <span id="target-host"
+                        class="highlight">Scanning...</span></div>
+                <div style="font-size: 1rem;">IP: <span id="target-ip">...</span></div>
+                <div id="scan-status" style="margin-top:5px; color: var(--text-dim);">IDLE</div>
+            </div>
+
+            <!-- My Details -->
+            <div class="my-details" style="border-top: 1px solid var(--border); padding-top: 20px;">
+                <div style="color: var(--highlight); font-weight: bold; margin-bottom: 8px;">Madan Raj</div>
+                <button id="connect-btn" class="action-btn" style="width: 100%; font-size: 0.8rem;">Connect on
+                    LinkedIn</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <header>
+                <h1>TARGET RECONNAISSANCE</h1>
+                <div class="actions">
+                    <input type="text" id="target-input" placeholder="Enter domain or IP..."
+                        style="background: #000; border: 1px solid var(--highlight); color: var(--highlight); padding: 8px 16px; font-family: inherit; font-size: 0.9rem; min-width: 250px;">
+                    <button id="start-scan-btn" class="action-btn">FULL SCAN</button>
+                    <button id="export-btn" class="action-btn">EXPORT XML</button>
+                </div>
+            </header>
+
+            <!-- Overview Section -->
+            <section id="overview" class="view-section active">
+                <div class="grid-2">
+                    <div class="panel">
+                        <h2>Quick Stats</h2>
+                        <div class="stat-row"><span>Open Ports:</span> <span id="stat-ports" class="highlight">0</span>
+                        </div>
+                        <div class="stat-row"><span>Subdomains:</span> <span id="stat-subs" class="highlight">0</span>
+                        </div>
+                        <div class="stat-row"><span>Vulns Found:</span> <span id="stat-vulns" class="danger">0</span>
+                        </div>
+                        <div class="stat-row"><span>OS Guess:</span> <span id="stat-os">Unknown</span></div>
+                    </div>
+                    <div class="panel">
+                        <h2>Target Metadata</h2>
+                        <div id="metadata-content" class="terminal-text">
+                            [+] Waiting for scan initiation...
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Nmap Scan Section -->
+            <section id="nmap-scan" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>Nmap Port Scan (via API)</h2>
+                        <button class="action-btn tool-run-btn" data-tool="nmap">RUN NMAP</button>
+                    </div>
+                    <div id="nmap-results" class="terminal-text scrollable">
+                        Click RUN NMAP to scan target ports with service detection.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Port Scan Section (browser-based) -->
+            <section id="port-scan" class="view-section">
+                <div class="panel full-height">
+                    <h2>Port Scan Results (Browser-based)</h2>
+                    <div id="port-results" class="terminal-text scrollable">
+                        PORT STATE SERVICE VERSION
+                        ------------------------------------
+                    </div>
+                </div>
+            </section>
+
+            <!-- DNS Lookup Section -->
+            <section id="dns-lookup" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>DNS Lookup</h2>
+                        <button class="action-btn tool-run-btn" data-tool="dns">RUN DNS LOOKUP</button>
+                    </div>
+                    <div id="dns-results" class="terminal-text scrollable">
+                        Click RUN DNS LOOKUP to query DNS records for the target.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reverse DNS Section -->
+            <section id="reverse-dns" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>Reverse DNS</h2>
+                        <button class="action-btn tool-run-btn" data-tool="reverse_dns">RUN REVERSE DNS</button>
+                    </div>
+                    <div id="reverse-dns-results" class="terminal-text scrollable">
+                        Click RUN REVERSE DNS to find hostnames for an IP.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reverse IP Section -->
+            <section id="reverse-ip" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>Reverse IP Lookup</h2>
+                        <button class="action-btn tool-run-btn" data-tool="reverse_ip">RUN REVERSE IP</button>
+                    </div>
+                    <div id="reverse-ip-results" class="terminal-text scrollable">
+                        Click RUN REVERSE IP to find all domains hosted on this IP.
+                    </div>
+                </div>
+            </section>
+
+            <!-- DNS Map Section -->
+            <section id="dns-map" class="view-section">
+                <div class="panel full-height" style="padding:0; overflow:hidden;">
+                    <div id="network-graph" style="width:100%; height:100%;"></div>
+                </div>
+            </section>
+
+            <!-- Traceroute Section -->
+            <section id="traceroute" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>Traceroute (MTR)</h2>
+                        <button class="action-btn tool-run-btn" data-tool="traceroute">RUN TRACEROUTE</button>
+                    </div>
+                    <div id="trace-results" class="terminal-text scrollable">
+                        Click RUN TRACEROUTE to trace network path to target.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ping Section -->
+            <section id="ping-tool" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>Ping (Nping)</h2>
+                        <button class="action-btn tool-run-btn" data-tool="ping">RUN PING</button>
+                    </div>
+                    <div id="ping-results" class="terminal-text scrollable">
+                        Click RUN PING to test host availability.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Whois Section -->
+            <section id="whois" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>Whois Lookup</h2>
+                        <button class="action-btn tool-run-btn" data-tool="whois">RUN WHOIS</button>
+                    </div>
+                    <div id="whois-results" class="terminal-text scrollable">
+                        Click RUN WHOIS to get domain/IP registration info.
+                    </div>
+                </div>
+            </section>
+
+            <!-- GeoIP Section -->
+            <section id="geoip" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>GeoIP Lookup</h2>
+                        <button class="action-btn tool-run-btn" data-tool="geoip">RUN GEOIP</button>
+                    </div>
+                    <div id="geoip-results" class="terminal-text scrollable">
+                        Click RUN GEOIP to find geographic location of target.
+                    </div>
+                </div>
+            </section>
+
+            <!-- ASN Lookup Section -->
+            <section id="asn-lookup" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>ASN IP Lookup</h2>
+                        <button class="action-btn tool-run-btn" data-tool="asn">RUN ASN LOOKUP</button>
+                    </div>
+                    <div id="asn-results" class="terminal-text scrollable">
+                        Click RUN ASN LOOKUP to find Autonomous System info.
+                    </div>
+                </div>
+            </section>
+
+            <!-- HTTP Headers Section -->
+            <section id="http-headers" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>HTTP Headers</h2>
+                        <button class="action-btn tool-run-btn" data-tool="http_headers">GET HEADERS</button>
+                    </div>
+                    <div id="headers-results" class="terminal-text scrollable">
+                        Click GET HEADERS to retrieve HTTP response headers.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Page Links Section -->
+            <section id="page-links" class="view-section">
+                <div class="panel full-height">
+                    <div class="tool-header">
+                        <h2>Page Links</h2>
+                        <button class="action-btn tool-run-btn" data-tool="page_links">GET LINKS</button>
+                    </div>
+                    <div id="links-results" class="terminal-text scrollable">
+                        Click GET LINKS to extract all links from the target page.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vuln Scan Section -->
+            <section id="vuln-scan" class="view-section">
+                <div class="panel full-height">
+                    <h2>Vulnerability Analysis</h2>
+                    <div id="vuln-results" class="terminal-text scrollable">
+                        No vulnerabilities detected yet.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dir Brute Section -->
+            <section id="dir-brute" class="view-section">
+                <div class="grid-2">
+                    <div class="panel">
+                        <h2>Wordlist Configuration</h2>
+                        <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px;">Enter paths (one per
+                            line) or upload a file.</p>
+                        <textarea id="wordlist-input" class="terminal-text"
+                            style="width: 100%; height: 200px; background: #001100; color: #00ff00; border: 1px solid #004400; padding: 10px; font-family: 'Courier New', Courier, monospace;"
+                            placeholder="admin&#10;config&#10;.env&#10;api/v1"></textarea>
+                        <div style="margin-top: 10px;">
+                            <button id="load-common-btn" class="action-btn" style="font-size: 0.7rem;">Load
+                                Common</button>
+                            <input type="file" id="wordlist-file" style="display: none;">
+                            <button onclick="document.getElementById('wordlist-file').click()" class="action-btn"
+                                style="font-size: 0.7rem;">Upload File</button>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <h2>Brute Force Results</h2>
+                        <div id="dir-progress"
+                            style="margin-bottom: 10px; height: 5px; background: #222; border-radius: 5px; overflow: hidden;">
+                            <div id="dir-progress-bar"
+                                style="width: 0%; height: 100%; background: var(--highlight); transition: width 0.3s;">
+                            </div>
+                        </div>
+                        <div id="dir-results" class="terminal-text" style="height: 300px; overflow-y: auto;">
+                            [+] Waiting for scan...
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Structure Section -->
+            <section id="structure" class="view-section">
+                <div class="panel full-height">
+                    <h2>Site Structure (Robots / Sitemap)</h2>
+                    <div id="structure-content" class="terminal-text scrollable">Analyzing...</div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+
+</html>
