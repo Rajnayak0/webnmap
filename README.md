@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/Version-1.1.0-brightgreen?style=flat-square" />
 </p>
 
-**webnmap** is a Chrome/Edge browser extension for active reconnaissance, port scanning, DNS enumeration, and vulnerability analysis — all from within your browser. It leverages the [HackerTarget.com](https://hackertarget.com) API for accurate, real-world network scanning results.
+**webnmap** is a Chrome/Edge browser extension for active reconnaissance, port scanning, DNS enumeration, and vulnerability analysis — all from within your browser. It leverages tool sends requests to **all configured API providers simultaneously** and returns the **first successful result** for accurate, real-world network scanning results.
 
 ---
 
