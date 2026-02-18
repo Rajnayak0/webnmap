@@ -96,7 +96,7 @@ webnmap/
 ├── background/                # Service worker & modules
 │   ├── background.js          # Main service worker
 │   └── modules/
-│       ├── network_tools.js   # HackerTarget API wrapper (12 tools)
+│       ├── network_tools.js   # Multi-API wrapper with failover (10 providers)
 │       ├── port_scanner.js    # Browser-based port scanner
 │       ├── dns_enum.js        # DNS resolution & subdomain finding
 │       ├── whois_lookup.js    # RDAP-based whois
@@ -113,15 +113,39 @@ webnmap/
 
 ---
 
-## 🔌 API
+## 🔌 APIs & Multi-Provider Failover
 
-This extension uses the **[HackerTarget Free API](https://hackertarget.com/ip-tools/)** for network scanning tools.
+Each tool sends requests to **all configured API providers simultaneously** and returns the **first successful result**. If one API is down, slow, or rate-limited, results automatically come from another provider.
 
-- **Free tier**: 100 API requests per day (no API key needed)
-- **Endpoints used**: `/nmap/`, `/mtr/`, `/nping/`, `/dnslookup/`, `/reversedns/`, `/reverseiplookup/`, `/whois/`, `/geoip/`, `/aslookup/`, `/httpheaders/`, `/pagelinks/`, `/subnetcalc/`
-- **No API key required** for the free tier
+| Tool | Providers |
+|---|---|
+| **DNS Lookup** | HackerTarget, Google DoH, Cloudflare DoH |
+| **Reverse DNS** | HackerTarget, Google DoH, Cloudflare DoH |
+| **Whois** | HackerTarget, RDAP (rdap.org), ipwhois.io |
+| **GeoIP** | HackerTarget, ip-api.com, ipapi.co, ipwhois.io |
+| **ASN Lookup** | HackerTarget, BGPView, ip-api.com |
+| **Traceroute** | HackerTarget, stat.ripe.net |
+| **Ping** | HackerTarget, Browser Timing |
+| **HTTP Headers** | HackerTarget, Direct Fetch |
+| **Page Links** | HackerTarget, Direct Extraction |
+| **Nmap Scan** | HackerTarget |
+| **Reverse IP** | HackerTarget |
 
-> ⚠️ If you exceed 100 queries/day, the API will return an error message. Results are cached locally to minimize API calls.
+### API Limits (Free Tier)
+
+| Provider | Limit | Key Required |
+|---|---|---|
+| **HackerTarget** | 100/day | No |
+| **Google DNS (DoH)** | Unlimited | No |
+| **Cloudflare DNS (DoH)** | Unlimited | No |
+| **ip-api.com** | 45/minute | No |
+| **ipapi.co** | 1,000/day | No |
+| **ipwhois.io** | 10,000/month | No |
+| **BGPView** | Unlimited | No |
+| **RDAP (rdap.org)** | Unlimited | No |
+| **stat.ripe.net** | Unlimited | No |
+
+> ⚠️ Results show `[Source: ProviderName]` so you always know which API returned the data.
 
 ---
 
